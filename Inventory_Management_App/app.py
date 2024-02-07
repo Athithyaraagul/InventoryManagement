@@ -3,70 +3,90 @@ from tkinter import ttk
 from tkinter import messagebox
 import sqlite3
 
-class LoginDialog(tk.Toplevel):
-    def __init__(self, parent, db_connection):
+class AddProductDialog(tk.Toplevel):
+    def __init__(self, parent):
         super().__init__(parent)
-        self.title("Login")
+        self.title("Add Product")
         self.parent = parent
-        self.db_connection = db_connection
         
-        self.username_var = tk.StringVar()
-        self.password_var = tk.StringVar()
+        self.product_id_var = tk.StringVar()
+        self.product_type_var = tk.StringVar()
+        self.model_id_var = tk.StringVar()
+        self.manufacturer_var = tk.StringVar()
+        self.department_var = tk.StringVar()
+        self.location_var = tk.StringVar()
+        self.incharge_var = tk.StringVar()
+        self.comment_var = tk.StringVar()
         
-        tk.Label(self, text="Username:").grid(row=0, column=0, sticky="e")
-        tk.Entry(self, textvariable=self.username_var).grid(row=0, column=1)
-        tk.Label(self, text="Password:").grid(row=1, column=0, sticky="e")
-        tk.Entry(self, textvariable=self.password_var, show="*").grid(row=1, column=1)
+        tk.Label(self, text="Product ID:").grid(row=0, column=0, sticky="e")
+        tk.Entry(self, textvariable=self.product_id_var).grid(row=0, column=1)
+        tk.Label(self, text="Product Type:").grid(row=1, column=0, sticky="e")
+        tk.Entry(self, textvariable=self.product_type_var).grid(row=1, column=1)
+        tk.Label(self, text="Model ID:").grid(row=2, column=0, sticky="e")
+        tk.Entry(self, textvariable=self.model_id_var).grid(row=2, column=1)
+        tk.Label(self, text="Manufacturer:").grid(row=3, column=0, sticky="e")
+        tk.Entry(self, textvariable=self.manufacturer_var).grid(row=3, column=1)
+        tk.Label(self, text="Department:").grid(row=4, column=0, sticky="e")
+        tk.Entry(self, textvariable=self.department_var).grid(row=4, column=1)
+        tk.Label(self, text="Location:").grid(row=5, column=0, sticky="e")
+        tk.Entry(self, textvariable=self.location_var).grid(row=5, column=1)
+        tk.Label(self, text="Incharge:").grid(row=6, column=0, sticky="e")
+        tk.Entry(self, textvariable=self.incharge_var).grid(row=6, column=1)
+        tk.Label(self, text="Comment:").grid(row=7, column=0, sticky="e")
+        tk.Entry(self, textvariable=self.comment_var).grid(row=7, column=1)
         
-        tk.Button(self, text="Login", command=self.login).grid(row=2, columnspan=2, pady=5)
+        tk.Button(self, text="Add", command=self.add_product).grid(row=8, columnspan=2, pady=5)
     
-    def login(self):
-        username = self.username_var.get()
-        password = self.password_var.get()
-        cursor = self.db_connection.cursor()
-        # Modify the SQL query to check both username and password
-        cursor.execute('''SELECT * FROM users WHERE username=? AND password=?''', (username, password))
-        user = cursor.fetchone()
-        if user:
-            if user[1] == 'admin':
-                self.parent.logged_in_as_admin = True
-            else:
-                self.parent.logged_in_as_admin = False
-            self.parent.update_ui_after_login()  # Update UI after login
-            self.destroy()
-        else:
-            messagebox.showerror("Error", "Invalid username or password")
+    def add_product(self):
+        # Get values from entry fields
+        product_id = self.product_id_var.get()
+        product_type = self.product_type_var.get()
+        model_id = self.model_id_var.get()
+        manufacturer = self.manufacturer_var.get()
+        department = self.department_var.get()
+        location = self.location_var.get()
+        incharge = self.incharge_var.get()
+        comment = self.comment_var.get()
+        
+        # Check if any field is empty
+        if not all([product_id, product_type, model_id, manufacturer, department, location, incharge, comment]):
+            messagebox.showwarning("Warning", "Please fill in all fields.")
+            return
+        
+        # Add the product to the SQLite database
+        conn = sqlite3.connect('inventory.db')
+        c = conn.cursor()
+        c.execute("INSERT INTO products (product_id, product_type, model_id, manufacturer, department, location, incharge, comment) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                  (product_id, product_type, model_id, manufacturer, department, location, incharge, comment))
+        conn.commit()
+        conn.close()
+        
+        # Refresh the treeview in the main window
+        self.parent.refresh_treeview()
+        
+        self.destroy()
 
 class InventoryApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Inventory Management")
         
-        db_file_path = '/Users/Athithyaraagul/Developer/Projects/Inventory_Management_App/inventory.db'
-        self.db_connection = sqlite3.connect(db_file_path)
-        self.logged_in_as_admin = False
-        
-        self.login_dialog = LoginDialog(self, self.db_connection)
-        
-        style = ttk.Style()
-        style.theme_use("clam")
-        style.configure("Treeview", background="#ffffff", foreground="#333333", fieldbackground="#ffffff")
-        style.map("Treeview", background=[("selected", "#007bff")])
-        
-        self.tree = ttk.Treeview(self, columns=("Product ID", "Product Type", "Model ID", "Manufacturer", "Department", "Location", "Incharge", "Comment"), show="headings", selectmode="browse")
-        self.tree.heading('Product ID', text='Product ID')
-        self.tree.heading('Product Type', text='Product Type')
-        self.tree.heading('Model ID', text='Model ID')
-        self.tree.heading('Manufacturer', text='Manufacturer')
-        self.tree.heading('Department', text='Department')
-        self.tree.heading('Location', text='Location')
-        self.tree.heading('Incharge', text='Incharge')
-        self.tree.heading('Comment', text='Comment')
+        self.tree = ttk.Treeview(self, columns=("Product ID", "Product Type", "Model ID", "Manufacturer", "Department", "Location", "Incharge", "Comment"))
+        self.tree.heading('#0', text='ID')
+        self.tree.heading('#1', text='Product ID')
+        self.tree.heading('#2', text='Product Type')
+        self.tree.heading('#3', text='Model ID')
+        self.tree.heading('#4', text='Manufacturer')
+        self.tree.heading('#5', text='Department')
+        self.tree.heading('#6', text='Location')
+        self.tree.heading('#7', text='Incharge')
+        self.tree.heading('#8', text='Comment')
         
         self.tree.pack(fill=tk.BOTH, expand=1)
         
-        self.add_button = ttk.Button(self, text="Add Product", command=self.open_add_product_dialog, state=tk.DISABLED)
-        self.add_button.pack(side=tk.LEFT, padx=5, pady=5)
+        # Add buttons
+        add_button = ttk.Button(self, text="Add Product", command=self.open_add_product_dialog)
+        add_button.pack(side=tk.LEFT, padx=5, pady=5)
         
         edit_button = ttk.Button(self, text="Edit Product", command=self.edit_product)
         edit_button.pack(side=tk.LEFT, padx=5, pady=5)
@@ -74,31 +94,60 @@ class InventoryApp(tk.Tk):
         delete_button = ttk.Button(self, text="Delete Product", command=self.delete_product)
         delete_button.pack(side=tk.LEFT, padx=5, pady=5)
         
-        self.load_data_from_database()
-    
-    def update_ui_after_login(self):
-        self.tree.delete(*self.tree.get_children())
-        self.load_data_from_database()
-        
-        if self.logged_in_as_admin:
-            self.add_button.config(state=tk.NORMAL)
+        # Add sample data
+        self.refresh_treeview()
     
     def open_add_product_dialog(self):
-        dialog = AddProductDialog(self, self.db_connection)
+        dialog = AddProductDialog(self)
         dialog.grab_set()  # Prevent interaction with main window while dialog is open
     
-    def load_data_from_database(self):
-        cursor = self.db_connection.cursor()
-        cursor.execute('''SELECT * FROM products''')
-        rows = cursor.fetchall()
-        for row in rows:
-            self.tree.insert('', 'end', values=row)
+    def refresh_treeview(self):
+        # Clear existing items in treeview
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+        
+        # Load data from SQLite database
+        conn = sqlite3.connect('inventory.db')
+        c = conn.cursor()
+        c.execute("SELECT * FROM products")
+        products = c.fetchall()
+        conn.close()
+        
+        # Insert data into treeview
+        for product in products:
+            self.tree.insert('', 'end', values=product)
     
     def edit_product(self):
+        # Implement logic to edit a product
         pass
     
     def delete_product(self):
-        pass
+        selected_item = self.tree.selection()
+        if not selected_item:
+            messagebox.showwarning("Warning", "Please select a product to delete.")
+            return
+        confirmed = messagebox.askyesno("Confirm Deletion", "Are you sure you want to delete the selected product?")
+        if confirmed:
+            # Delete the product from the SQLite database
+            conn = sqlite3.connect('inventory.db')
+            c = conn.cursor()
+            c.execute("DELETE FROM products WHERE rowid=?", (selected_item[0],))
+            conn.commit()
+            conn.close()
+            
+            # Refresh the treeview
+            self.refresh_treeview()
+            messagebox.showinfo("Deleted", "Product deleted successfully.")
+        else:
+            messagebox.showinfo("Cancelled", "Deletion cancelled.")
+
+# Create SQLite database and table if they don't exist
+conn = sqlite3.connect('inventory.db')
+c = conn.cursor()
+c.execute('''CREATE TABLE IF NOT EXISTS products
+             (product_id TEXT, product_type TEXT, model_id TEXT, manufacturer TEXT, department TEXT, location TEXT, incharge TEXT, comment TEXT)''')
+conn.commit()
+conn.close()
 
 if __name__ == "__main__":
     app = InventoryApp()
