@@ -18,22 +18,25 @@ class AddProductDialog(tk.Toplevel):
         self.incharge_var = tk.StringVar()
         self.comment_var = tk.StringVar()
         
+        # Function to center-align text in entry fields
+        center_align = {'justify': 'center'}
+        
         tk.Label(self, text="Product ID:").grid(row=0, column=0, sticky="e")
-        tk.Entry(self, textvariable=self.product_id_var).grid(row=0, column=1)
+        tk.Entry(self, textvariable=self.product_id_var, **center_align).grid(row=0, column=1)
         tk.Label(self, text="Product Type:").grid(row=1, column=0, sticky="e")
-        tk.Entry(self, textvariable=self.product_type_var).grid(row=1, column=1)
+        tk.Entry(self, textvariable=self.product_type_var, **center_align).grid(row=1, column=1)
         tk.Label(self, text="Model ID:").grid(row=2, column=0, sticky="e")
-        tk.Entry(self, textvariable=self.model_id_var).grid(row=2, column=1)
+        tk.Entry(self, textvariable=self.model_id_var, **center_align).grid(row=2, column=1)
         tk.Label(self, text="Manufacturer:").grid(row=3, column=0, sticky="e")
-        tk.Entry(self, textvariable=self.manufacturer_var).grid(row=3, column=1)
+        tk.Entry(self, textvariable=self.manufacturer_var, **center_align).grid(row=3, column=1)
         tk.Label(self, text="Department:").grid(row=4, column=0, sticky="e")
-        tk.Entry(self, textvariable=self.department_var).grid(row=4, column=1)
+        tk.Entry(self, textvariable=self.department_var, **center_align).grid(row=4, column=1)
         tk.Label(self, text="Location:").grid(row=5, column=0, sticky="e")
-        tk.Entry(self, textvariable=self.location_var).grid(row=5, column=1)
+        tk.Entry(self, textvariable=self.location_var, **center_align).grid(row=5, column=1)
         tk.Label(self, text="Incharge:").grid(row=6, column=0, sticky="e")
-        tk.Entry(self, textvariable=self.incharge_var).grid(row=6, column=1)
+        tk.Entry(self, textvariable=self.incharge_var, **center_align).grid(row=6, column=1)
         tk.Label(self, text="Comment:").grid(row=7, column=0, sticky="e")
-        tk.Entry(self, textvariable=self.comment_var).grid(row=7, column=1)
+        tk.Entry(self, textvariable=self.comment_var, **center_align).grid(row=7, column=1)
         
         tk.Button(self, text="Add", command=self.add_product).grid(row=8, columnspan=2, pady=5)
     
@@ -72,7 +75,6 @@ class InventoryApp(tk.Tk):
         self.title("Inventory Management")
         
         self.tree = ttk.Treeview(self, columns=("Product ID", "Product Type", "Model ID", "Manufacturer", "Department", "Location", "Incharge", "Comment"))
-        self.tree.heading('#0', text='ID')
         self.tree.heading('#1', text='Product ID')
         self.tree.heading('#2', text='Product Type')
         self.tree.heading('#3', text='Model ID')
