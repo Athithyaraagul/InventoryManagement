@@ -58,16 +58,16 @@ class AddProductDialog(tk.Toplevel):
         
         # Establish connection to PostgreSQL database
         conn = psycopg2.connect(
-            dbname="inventorymanagement",
-            user="athithyaraagul",
-            password="Athithya@2004$$",
+            dbname="dbname",
+            user="username",
+            password="password",
             host="localhost",
-            port="5000"
+            port="5432"
         )
         cursor = conn.cursor()
 
         # Insert data into the table
-        cursor.execute("INSERT INTO inventorymanagement (product_id, product_type, model_id, manufacturer, department, location, incharge, comment) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+        cursor.execute("INSERT INTO dbname (product_id, product_type, model_id, manufacturer, department, location, incharge, comment) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
                    (product_id, product_type, model_id, manufacturer, department, location, incharge, comment))
         conn.commit()
         conn.close()
@@ -102,14 +102,14 @@ class EditProductDialog(tk.Toplevel):
     def fetch_product_data(self):
         # Fetch data for the selected product from the database
         conn = psycopg2.connect(
-            dbname="inventorymanagement",
-            user="athithyaraagul",
-            password="Athithya@2004$$",
+            dbname="dbname",
+            user="username",
+            password="password",
             host="localhost",
-            port="5000"
+            port="5432"
         )
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM inventorymanagement WHERE product_id=%s", (self.product_id,))
+        cursor.execute("SELECT * FROM dbname WHERE product_id=%s", (self.product_id,))
         product_data = cursor.fetchone()
         conn.close()
         
@@ -158,14 +158,14 @@ class EditProductDialog(tk.Toplevel):
         
         # Update the product in the database
         conn = psycopg2.connect(
-            dbname="inventorymanagement",
-            user="athithyaraagul",
-            password="Athithya@2004$$",
+            dbname="dbname",
+            user="username",
+            password="password",
             host="localhost",
-            port="5000"
+            port="5432"
         )
         cursor = conn.cursor()
-        cursor.execute("UPDATE inventorymanagement SET product_type=%s, model_id=%s, manufacturer=%s, department=%s, location=%s, incharge=%s, comment=%s WHERE product_id=%s",
+        cursor.execute("UPDATE dbname SET product_type=%s, model_id=%s, manufacturer=%s, department=%s, location=%s, incharge=%s, comment=%s WHERE product_id=%s",
                        (product_type, model_id, manufacturer, department, location, incharge, comment, self.product_id))
         conn.commit()
         conn.close()
@@ -193,14 +193,14 @@ class DeleteProductDialog(tk.Toplevel):
     def delete_product(self):
         # Delete the product from the database
         conn = psycopg2.connect(
-            dbname="inventorymanagement",
-            user="athithyaraagul",
-            password="Athithya@2004$$",
+            dbname="dbname",
+            user="username",
+            password="password",
             host="localhost",
-            port="5000"
+            port="5432"
         )
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM inventorymanagement WHERE product_id=%s", (self.product_id,))
+        cursor.execute("DELETE FROM dbname WHERE product_id=%s", (self.product_id,))
         conn.commit()
         conn.close()
         
@@ -274,16 +274,16 @@ class AddProductDialog(tk.Toplevel):
         
         # Establish connection to PostgreSQL database
         conn = psycopg2.connect(
-            dbname="inventorymanagement",
-            user="athithyaraagul",
-            password="Athithya@2004$$",
+            dbname="dbname",
+            user="username",
+            password="password",
             host="localhost",
-            port="5000"
+            port="5432"
         )
         cursor = conn.cursor()
 
         # Insert data into the table
-        cursor.execute("INSERT INTO inventorymanagement (product_id, product_type, model_id, manufacturer, department, location, incharge, comment) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+        cursor.execute("INSERT INTO dbname (product_id, product_type, model_id, manufacturer, department, location, incharge, comment) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
                    (product_id, product_type, model_id, manufacturer, department, location, incharge, comment))
         conn.commit()
         conn.close()
@@ -318,14 +318,14 @@ class EditProductDialog(tk.Toplevel):
     def fetch_product_data(self):
         # Fetch data for the selected product from the database
         conn = psycopg2.connect(
-            dbname="inventorymanagement",
-            user="athithyaraagul",
-            password="Athithya@2004$$",
+            dbname="dbname",
+            user="username",
+            password="password",
             host="localhost",
-            port="5000"
+            port="5432"
         )
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM inventorymanagement WHERE product_id=%s", (self.product_id,))
+        cursor.execute("SELECT * FROM dbname WHERE product_id=%s", (self.product_id,))
         product_data = cursor.fetchone()
         conn.close()
         
@@ -374,14 +374,14 @@ class EditProductDialog(tk.Toplevel):
         
         # Update the product in the database
         conn = psycopg2.connect(
-            dbname="inventorymanagement",
-            user="athithyaraagul",
-            password="Athithya@2004$$",
+            dbname="dbname",
+            user="username",
+            password="password",
             host="localhost",
-            port="5000"
+            port="5432"
         )
         cursor = conn.cursor()
-        cursor.execute("UPDATE inventorymanagement SET product_type=%s, model_id=%s, manufacturer=%s, department=%s, location=%s, incharge=%s, comment=%s WHERE product_id=%s",
+        cursor.execute("UPDATE dbname SET product_type=%s, model_id=%s, manufacturer=%s, department=%s, location=%s, incharge=%s, comment=%s WHERE product_id=%s",
                        (product_type, model_id, manufacturer, department, location, incharge, comment, self.product_id))
         conn.commit()
         conn.close()
@@ -409,14 +409,14 @@ class DeleteProductDialog(tk.Toplevel):
     def delete_product(self):
         # Delete the product from the database
         conn = psycopg2.connect(
-            dbname="inventorymanagement",
-            user="athithyaraagul",
-            password="Athithya@2004$$",
+            dbname="dbname",
+            user="username",
+            password="password",
             host="localhost",
-            port="5000"
+            port="5432"
         )
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM inventorymanagement WHERE product_id=%s", (self.product_id,))
+        cursor.execute("DELETE FROM dbname WHERE product_id=%s", (self.product_id,))
         conn.commit()
         conn.close()
         
@@ -473,16 +473,16 @@ class InventoryApp(tk.Tk):
         
         # Establish connection to PostgreSQL database
         conn = psycopg2.connect(
-            dbname="inventorymanagement",
-            user="athithyaraagul",
-            password="Athithya@2004$$",
+            dbname="dbname",
+            user="username",
+            password="password",
             host="localhost",
-            port="5000"
+            port="5432"
         )
         cursor = conn.cursor()
 
         # Fetch data from the table
-        cursor.execute("SELECT * FROM inventorymanagement")
+        cursor.execute("SELECT * FROM dbname")
         products = cursor.fetchall()
         conn.close()
         
